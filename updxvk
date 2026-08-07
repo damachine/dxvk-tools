@@ -68,27 +68,25 @@ build() {
 mkdir -p DXVKBUILD
 mkdir -p DXVKBUILD/patches
 
-if [ "$DIRTYIN" != "2" ]; then
-  if [ -e "dxvk-$DXVK_BRANCH.dxvkdirty" ] || [ "$DIRTYIN" == "1" ]; then
+if [ "$DIRTYIN" == "2" ]; then
+  echo "#################"
+  echo ""
+  echo "YOU DIRTY BOI.."
+  echo ""
+  echo "#################"
+elif [ -d "dxvk-$DXVK_BRANCH" ] && { [ -e "dxvk-$DXVK_BRANCH.dxvkdirty" ] || [ "$DIRTYIN" == "1" ]; }; then
   ( cd dxvk-"$DXVK_BRANCH" && git reset --hard HEAD && git clean -xdf )
   echo "#################"
   echo ""
   echo "YOUR TREE WAS CONSIDERED DIRTY AND HAS BEEN CLEARED"
   echo ""
   echo "#################"
-  rm "$DXVK_BRANCH".dxvkdirty
-  fi
-else
-  echo "#################"
-  echo ""
-  echo "YOU DIRTY BOI.."
-  echo ""
-  echo "#################"
+  [ -e "$DXVK_BRANCH".dxvkdirty ] && rm "$DXVK_BRANCH".dxvkdirty
 fi
 
-mkdir dxvk-"$DXVK_BRANCH"
+mkdir -p "dxvk-$DXVK_BRANCH"
 
-cd dxvk-"$DXVK_BRANCH"
+cd "dxvk-$DXVK_BRANCH" || exit 1
 
 if [ ! -e package-release.sh ]; then
   git init .
